@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TDI Cyber Terminal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+  <style>
+    /* Matrix Rain Effect */
+    .matrix {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .matrix span {
+      position: absolute;
+      top: -10px;
+      left: calc(1vw * var(--pos));
+      font-size: 16px;
+      font-weight: bold;
+      color: rgba(0, 255, 0, 0.8);
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      from { transform: translateY(-100%); opacity: 0.8; }
+      to { transform: translateY(100vh); opacity: 0; }
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      color: #00ff00;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 900px;
+      padding: 15px 20px;
+      background-color: rgba(0, 255, 0, 0.1);
+      border-radius: 10px;
+      border: 2px solid #00ff00;
+      box-shadow: 0 0 15px #00ff00;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .header img {
+      height: 50px;
+      filter: drop-shadow(0 0 10px #00ff00);
+    }
+
+    .tagline {
+      font-size: 20px;
+      margin-top: 10px;
+      font-weight: 600;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .editor {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      margin-top: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 15px;
+      font-size: 16px;
+      border: 2px solid #00ff00;
+      border-radius: 5px;
+      background: rgba(0, 255, 0, 0.1);
+      box-shadow: 0 0 15px #00ff00;
+      color: #00ff00;
+      outline: none;
+      caret-color: #00ff00;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      max-width: 900px;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: 2px solid #00ff00;
+      background: transparent;
+      color: #00ff00;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ff00;
+      transition: all 0.3s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #00ff00;
+      color: black;
+      box-shadow: 0 0 25px #00ff00;
+    }
+
+    .output-container {
+      width: 100%;
+      max-width: 900px;
+      margin-top: 20px;
+    }
+
+    .output {
+      width: 100%;
+      height: 300px;
+      border: 2px solid #00ff00;
+      background: rgba(0, 255, 0, 0.1);
+      box-shadow: 0 0 15px #00ff00;
+      border-radius: 5px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #00ff00;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="matrix"></div>
+
+  <div class="container">
+    <div class="header">
+      <div class="header-title" id="header">TDI Cyber Terminal</div>
+      <img src="https://assets.onecompiler.app/434ykgjk6/435zvmt9f/AddText_01-14-01.19.21.png" alt="TDI Logo">
+    </div>
+
+    <div class="tagline">Bring Your Creativity Into Reality</div>
+
+    <div class="buttons">
+      <button onclick="checkCode()">Check Code</button>
+      <button onclick="runCode()">Run Code</button>
+      <button onclick="clearCode()">Clear</button>
+      <button onclick="downloadCode()">Download</button>
+      <button onclick="generateCode()">Example Code</button>
+    </div>
+
+    <div class="editor">
+      <textarea id="htmlCode" placeholder="Write your HTML code here..."></textarea>
+    </div>
+
+    <div class="output-container">
+      <iframe id="output" class="output"></iframe>
+    </div>
+
+    <div class="footer">Created with ❤️ by TDI Team.</div>
+  </div>
+
+  <script>
+    function generateMatrixEffect() {
+      const matrixContainer = document.querySelector('.matrix');
+      for (let i = 0; i < 100; i++) {
+          const span = document.createElement('span');
+          span.innerText = Math.random() > 0.5 ? '0' : '1';
+          span.style.setProperty('--pos', Math.random() * 100);
+          span.style.animationDuration = `${Math.random() * 5 + 2}s`;
+          matrixContainer.appendChild(span);
+      }
+    }
+    generateMatrixEffect();
+
+    function checkCode() {
+      const htmlCode = document.getElementById('htmlCode').value;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlCode, 'text/html');
+      if (doc.querySelector('parsererror')) {
+          alert('Error: Invalid HTML syntax detected!');
+      } else {
+          alert('HTML code is valid!');
+      }
+    }
+
+    function runCode() {
+      const htmlCode = document.getElementById('htmlCode').value;
+      document.getElementById('output').srcdoc = htmlCode;
+    }
+
+    function clearCode() {
+      document.getElementById('htmlCode').value = '';
+      document.getElementById('output').srcdoc = '';
+    }
+
+    function downloadCode() {
+      const htmlCode = document.getElementById('htmlCode').value;
+      const blob = new Blob([htmlCode], { type: 'text/html' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'TDI_Cyber_Terminal.html';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function generateCode() {
+      document.getElementById('htmlCode').value = "<h1>Welcome to the Cyber World!</h1>";
+    }
+  </script>
+
+</body>
+</html>
